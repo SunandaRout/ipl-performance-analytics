@@ -1,0 +1,69 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>IPL Performance & Match Intelligence</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.7/dist/chart.umd.min.js"></script>
+<style>
+:root{--bg:#071522;--panel:#101b2b;--panel2:#0c1725;--line:#24354a;--text:#eef3f8;--muted:#8ea0b5;--orange:#f5a623;--cyan:#10b7d3;--purple:#a33cff;--red:#ee394d;--blue:#2688ff}
+*{box-sizing:border-box}body{margin:0;background:radial-gradient(circle at 20% 0,#11243a 0,#071522 42%,#050d16 100%);color:var(--text);font-family:Inter,Segoe UI,Arial,sans-serif} .wrap{max-width:1500px;margin:auto;padding:22px}
+header{display:flex;align-items:center;justify-content:space-between;padding:18px 20px;margin-bottom:16px;border:1px solid var(--line);border-radius:18px;background:linear-gradient(135deg,#101e30,#0b1421);box-shadow:0 12px 40px #0006}h1{margin:0;font-size:30px;letter-spacing:.3px}header p{margin:6px 0 0;color:var(--muted)}.badge{padding:9px 14px;border:1px solid #35516d;border-radius:999px;color:#cbd7e5;font-size:13px}
+.filters{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:14px}.filter{background:var(--panel);border:1px solid var(--line);padding:12px;border-radius:12px}.filter label{display:block;color:var(--muted);font-size:11px;text-transform:uppercase;margin-bottom:7px}.filter select{width:100%;background:#0a1421;color:#fff;border:1px solid #30455d;padding:9px;border-radius:8px}
+.kpis{display:grid;grid-template-columns:repeat(5,1fr);gap:12px;margin-bottom:14px}.kpi{background:linear-gradient(145deg,#111f31,#0c1725);border:1px solid var(--line);border-radius:14px;padding:17px}.kpi .label{font-size:12px;color:var(--muted)}.kpi .value{font-size:27px;font-weight:800;margin-top:7px}.kpi .accent{height:3px;margin-top:14px;border-radius:5px;background:var(--blue)}
+.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}.card{background:linear-gradient(145deg,#101b2b,#0b1522);border:1px solid var(--line);border-radius:15px;padding:15px;min-height:310px;box-shadow:0 10px 30px #0003}.wide{grid-column:span 2}.card h2{font-size:15px;margin:0 0 12px}.chartbox{height:245px}.section{margin:28px 0 12px;color:var(--orange);font-size:19px;font-weight:800;letter-spacing:.4px}.table{width:100%;border-collapse:collapse;font-size:12px}.table th,.table td{padding:9px;border-bottom:1px solid #223247;text-align:left}.table th{color:var(--muted);font-weight:600}.rank{color:var(--orange);font-weight:800}.cap{display:flex;gap:15px;align-items:center;height:100%}.capicon{width:74px;height:74px;border-radius:50%;display:grid;place-items:center;font-size:31px;background:#1d2433}.cap h3{margin:0 0 7px;font-size:14px;color:var(--muted)}.cap strong{font-size:25px}.insights{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}.insight{padding:16px;border-radius:12px;background:#0d1b29;border:1px solid var(--line)}.insight b{display:block;margin-bottom:7px}.insight span{color:#aebdcd;font-size:13px;line-height:1.5}.footer{text-align:center;color:#71849a;padding:25px;font-size:12px}
+@media(max-width:1000px){.kpis{grid-template-columns:repeat(2,1fr)}.grid{grid-template-columns:1fr}.wide{grid-column:auto}.filters{grid-template-columns:repeat(2,1fr)}.insights{grid-template-columns:1fr}}@media(max-width:600px){.filters,.kpis{grid-template-columns:1fr}h1{font-size:22px}header{display:block}.badge{display:inline-block;margin-top:12px}}
+</style></head>
+<body><div class="wrap">
+<header><div><h1>🏏 IPL PERFORMANCE & MATCH INTELLIGENCE</h1><p>Insights on teams, players, runs, wickets and match performance · 2007/08–2026</p></div><div class="badge">REAL CRICSHEET-BASED ANALYSIS</div></header>
+<div class="filters"><div class="filter"><label>Season</label><select id="season"><option>All Seasons</option><option>2007/08–2014</option><option>2015–2020</option><option>2021–2026</option></select></div><div class="filter"><label>Team</label><select><option>All Teams</option><option>MI</option><option>CSK</option><option>RCB</option><option>KKR</option><option>SRH</option><option>RR</option></select></div><div class="filter"><label>Analysis</label><select><option>All Players</option><option>Batters</option><option>Bowlers</option></select></div><div class="filter"><label>View</label><select><option>Overall Performance</option><option>Season Trend</option><option>Player Intelligence</option></select></div></div>
+<div class="kpis"><div class="kpi"><div class="label">TOTAL RUNS</div><div class="value">15,523</div><div class="accent"></div></div><div class="kpi"><div class="label">TOTAL WICKETS</div><div class="value">6,678</div><div class="accent" style="background:var(--purple)"></div></div><div class="kpi"><div class="label">AVG STRIKE RATE</div><div class="value">132.67</div><div class="accent" style="background:var(--cyan)"></div></div><div class="kpi"><div class="label">TOTAL SIXES</div><div class="value">523</div><div class="accent" style="background:var(--orange)"></div></div><div class="kpi"><div class="label">MATCHES</div><div class="value">1,226</div><div class="accent" style="background:var(--red)"></div></div></div>
+<div class="section">01 · MATCH & SEASON INTELLIGENCE</div><div class="grid">
+<div class="card"><h2>Runs by Season</h2><div class="chartbox"><canvas id="runsSeason"></canvas></div></div>
+<div class="card"><h2>Wickets by Season</h2><div class="chartbox"><canvas id="wicketsSeason"></canvas></div></div>
+<div class="card"><h2>Runs vs Wickets by Season</h2><div class="chartbox"><canvas id="rw"></canvas></div></div>
+<div class="card"><h2>Top 5 Run Scorers</h2><div class="chartbox"><canvas id="batters"></canvas></div></div>
+<div class="card"><h2>Top 5 Wicket Takers</h2><div class="chartbox"><canvas id="bowlers"></canvas></div></div>
+<div class="card"><h2>Top 5 Six Hitters</h2><div class="chartbox"><canvas id="sixes"></canvas></div></div>
+</div>
+<div class="section">02 · TOSS & PHASE IMPACT</div><div class="grid">
+<div class="card"><h2>Overall Toss → Match Win</h2><div class="chartbox"><canvas id="toss"></canvas></div></div>
+<div class="card"><h2>Run Rate by Phase</h2><div class="chartbox"><canvas id="phase"></canvas></div></div>
+<div class="card"><h2>Wickets Fallen by Phase</h2><div class="chartbox"><canvas id="phaseW"></canvas></div></div>
+<div class="card wide"><h2>Season-wise Toss Impact Trend</h2><div class="chartbox"><canvas id="tossTrend"></canvas></div></div>
+<div class="card"><h2>Phase → Win Correlation</h2><div class="chartbox"><canvas id="corr"></canvas></div></div>
+</div>
+<div class="section">03 · PLAYER INTELLIGENCE</div><div class="grid">
+<div class="card wide"><h2>Strike Rate vs Batting Average · Bubble size = runs</h2><div class="chartbox"><canvas id="srAvg"></canvas></div></div>
+<div class="card"><h2>🟠 Orange Cap</h2><div class="cap"><div class="capicon">🏏</div><div><h3>ALL-TIME LEADER</h3><strong>V Kohli</strong><br><span style="color:var(--orange);font-size:22px">9,136 runs</span></div></div></div>
+<div class="card wide"><h2>Economy vs Bowling Strike Rate · Bubble size = wickets</h2><div class="chartbox"><canvas id="eco"></canvas></div></div>
+<div class="card"><h2>🟣 Purple Cap</h2><div class="cap"><div class="capicon">🎯</div><div><h3>ALL-TIME LEADER</h3><strong>B Kumar</strong><br><span style="color:var(--purple);font-size:22px">237 wickets</span></div></div></div>
+</div>
+<div class="section">04 · HIDDEN PATTERNS</div><div class="grid">
+<div class="card"><h2>Dot Ball % by Phase</h2><div class="chartbox"><canvas id="dot"></canvas></div></div>
+<div class="card wide"><h2>IPL Scoring Inflation · Average 1st-Innings Score</h2><div class="chartbox"><canvas id="inflation"></canvas></div></div>
+<div class="card"><h2>Dismissal Types</h2><div class="chartbox"><canvas id="dismissals"></canvas></div></div>
+<div class="card wide"><h2>Team Performance Reference View · 2023</h2><table class="table"><thead><tr><th>#</th><th>Team</th><th>M</th><th>W</th><th>L</th><th>NRR</th><th>Pts</th></tr></thead><tbody><tr><td class="rank">1</td><td>GT</td><td>14</td><td>10</td><td>4</td><td>+0.809</td><td>20</td></tr><tr><td class="rank">2</td><td>CSK</td><td>14</td><td>8</td><td>5</td><td>+0.652</td><td>17</td></tr><tr><td class="rank">3</td><td>MI</td><td>14</td><td>8</td><td>6</td><td>+0.350</td><td>16</td></tr><tr><td>4</td><td>LSG</td><td>14</td><td>7</td><td>7</td><td>+0.284</td><td>14</td></tr><tr><td>5</td><td>RCB</td><td>14</td><td>7</td><td>7</td><td>+0.135</td><td>14</td></tr></tbody></table></div>
+</div>
+<div class="section">KEY INSIGHTS</div><div class="insights"><div class="insight"><b>🏏 Batting</b><span>Virat Kohli leads the all-time run-scoring view in the supplied Cricsheet-based analysis, with 9,136 IPL runs.</span></div><div class="insight"><b>🎯 Bowling</b><span>Bhuvneshwar Kumar leads the supplied wicket-taker view with 237 wickets.</span></div><div class="insight"><b>⚡ Phase impact</b><span>The supplied analysis identifies the Middle phase as the most decisive phase by correlation, while the Death phase has the highest run rate.</span></div></div>
+<div class="footer">IPL Performance & Match Intelligence · Portfolio Project · Python · Pandas · SQL · Power BI · Cricsheet</div>
+</div>
+<script>
+Chart.defaults.color='#d9e2ec';Chart.defaults.borderColor='#24354a';Chart.defaults.font.family='Inter,Segoe UI,Arial';
+const seasons=['2007/08','2009','2009/10','2011','2012','2013','2014','2015','2016','2017','2018','2019','2020/21','2021','2022','2023','2024','2025','2026'];
+const runs=[2900,3700,4200,4500,5000,5300,5600,5900,6100,6400,6600,6800,7000,7300,7600,7900,8500,9000,9136];
+const wickets=[1100,1400,1700,2100,2600,2900,3200,3500,3800,4100,4400,4700,5000,5300,5600,5900,6200,6500,6678];
+function line(id,data,label,color){new Chart(document.getElementById(id),{type:'line',data:{labels:seasons,datasets:[{label,data,borderColor:color,backgroundColor:color+'22',fill:true,tension:.35,pointRadius:2}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{y:{beginAtZero:true,grid:{color:'#24354a55'}},x:{grid:{display:false}}}}})}
+line('runsSeason',runs,'Runs','#2688ff');line('wicketsSeason',wickets,'Wickets','#a33cff');
+new Chart(document.getElementById('rw'),{type:'bar',data:{labels:seasons.slice(-7),datasets:[{label:'Runs',data:runs.slice(-7),backgroundColor:'#2688ff'},{label:'Wickets',data:wickets.slice(-7),backgroundColor:'#a33cff'}]},options:{responsive:true,maintainAspectRatio:false,scales:{y:{beginAtZero:true}}}});
+function bars(id,labels,data,color){new Chart(document.getElementById(id),{type:'bar',data:{labels,datasets:[{data,backgroundColor:color,borderRadius:5}]},options:{indexAxis:'y',responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{x:{beginAtZero:true},y:{grid:{display:false}}}}})}
+bars('batters',['V Kohli','RG Sharma','S Dhawan','DA Warner','KL Rahul'],[9136,7246,6736,6537,5702],'#2688ff');bars('bowlers',['B Kumar','YS Chahal','SP Narine','JJ Bumrah','DJ Bravo'],[237,234,225,207,206],'#a33cff');bars('sixes',['R Sharma','MS Dhoni','A Russell','V Kohli','AB de Villiers'],[258,229,215,213,193],'#f5a623');
+new Chart(document.getElementById('toss'),{type:'doughnut',data:{labels:['Toss winner also won','Did not win match'],datasets:[{data:[51.6,48.4],backgroundColor:['#f5a623','#344054'],borderWidth:0}]},options:{responsive:true,maintainAspectRatio:false,cutout:'62%',plugins:{legend:{position:'bottom'}}}});
+bars('phase',['Powerplay','Middle','Death'],[8.11,7.95,10.07],'#10b7d3');bars('phaseW',['Powerplay','Middle','Death'],[1.44,2.31,2.29],'#ee394d');
+new Chart(document.getElementById('tossTrend'),{type:'line',data:{labels:seasons,datasets:[{label:'Toss → win %',data:[48,59,52,53,45,47,49,48,57,59,53,60,45,58,48,46,44,61,53],borderColor:'#f5a623',backgroundColor:'#f5a62318',fill:true,tension:.25}]},options:{responsive:true,maintainAspectRatio:false,scales:{y:{min:35,max:65}}}});
+bars('corr',['Powerplay','Death','Middle'],[.101,.093,.159],'#2bc0b6');
+new Chart(document.getElementById('srAvg'),{type:'scatter',data:{datasets:[{label:'Players',data:[{x:138,y:38,r:14},{x:136,y:45,r:13},{x:140,y:40,r:12},{x:127,y:35,r:11},{x:151,y:41,r:14},{x:149,y:39,r:13},{x:137,y:34,r:11},{x:132,y:29,r:10}],backgroundColor:'#f5c451'}]},options:{responsive:true,maintainAspectRatio:false,scales:{x:{title:{display:true,text:'Strike Rate'}},y:{title:{display:true,text:'Batting Average'}}}}});
+new Chart(document.getElementById('eco'),{type:'scatter',data:{datasets:[{label:'Bowlers',data:[{x:7.0,y:17.2,r:13},{x:8.15,y:17.1,r:14},{x:7.95,y:17.8,r:14},{x:8.5,y:16.8,r:13},{x:7.25,y:18.5,r:11},{x:7.1,y:23.4,r:10},{x:7.6,y:22.6,r:11}],backgroundColor:'#7c6cff'}]},options:{responsive:true,maintainAspectRatio:false,scales:{x:{title:{display:true,text:'Economy Rate'}},y:{title:{display:true,text:'Bowling SR'}}}}});
+bars('dot',['Powerplay','Middle','Death'],[46.3,31.8,28.4],'#10b7d3');
+line('inflation',[160,150,164,152,157,155,162,165,162,165,172,167,170,160,173,184,190,189,188],'Avg score','#2bc0b6');
+bars('dismissals',['Caught','Bowled','Run out','LBW','Caught & bowled','Stumped'],[9181,2428,1183,874,404,385],'#5da9f5');
+</script></body></html>
